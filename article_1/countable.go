@@ -5,12 +5,12 @@ import (
 	"sync/atomic"
 )
 
-// Stores counts associated with a key.
+// Counter Stores counts associated with a key.
 type Counter struct {
 	m sync.Map
 }
 
-// Retrieves the count without modifying it
+// Get Retrieves the count without modifying it
 func (c *Counter) Get(key string) (int64, bool) {
 	count, ok := c.m.Load(key)
 	if ok {
@@ -19,7 +19,7 @@ func (c *Counter) Get(key string) (int64, bool) {
 	return 0, false
 }
 
-// Adds value to the stored underlying value if it exists.
+// Add Adds value to the stored underlying value if it exists.
 // If it does not exists, the value is assigned to the key.
 func (c *Counter) Add(key string, value int64) int64 {
 	count, loaded := c.m.LoadOrStore(key, &value)
@@ -29,7 +29,7 @@ func (c *Counter) Add(key string, value int64) int64 {
 	return *count.(*int64)
 }
 
-// Deletes the value associated with key and retrieves its.
+// DeleteAndGetLastValue Deletes the value associated with key and retrieves its.
 func (c *Counter) DeleteAndGetLastValue(key string) (int64, bool) {
 	lastValue, loaded := c.m.LoadAndDelete(key)
 	if loaded {
